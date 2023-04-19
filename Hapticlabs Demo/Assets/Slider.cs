@@ -45,9 +45,9 @@ public class Slider : MonoBehaviour {
                 // this runs every time the slider position changes a whole integer (the whole slider is -5 to 5)
                 Debug.Log(sliderFloor);
                 intensity = ((float)sliderFloor + 5.0f)/10.0f;
-                Serial.Write(";b(\"v( " + intensity + " 120 150000)\";");
+                Serial.Write(";a(\"v( " + intensity + " 120 150000)\";");
                 // Serial.Write(";a(\"startTrack(\"1\")\")b(\"startTrack(\"1\")\");");
-                Debug.Log(";b(\"v( " + intensity + " 120 150000)\";");
+                Debug.Log(";a(\"v( " + intensity + " 120 150000)\";");
                 sliderFloorOld = sliderFloor;
             }
         } else{
