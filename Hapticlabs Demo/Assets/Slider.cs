@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Slider : MonoBehaviour {
     
+    public GameObject hands;
     public GameObject slider;
-    public GameObject button;
-    public GameObject line;
 
     private bool grabbing = false;
     private Vector3 startPosition;
@@ -19,11 +18,28 @@ public class Slider : MonoBehaviour {
     public float intensity;
 
     HandTracking handTracking;
-    LineRenderer lineRenderer;
+
+    private List<GameObject> collidingObjects = new List<GameObject>();
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Debug.Log("Collision detected with " + collision.gameObject.name);
+        if (!collidingObjects.Contains(collision.gameObject))
+        {
+            collidingObjects.Add(collision.gameObject);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collidingObjects.Contains(collision.gameObject))
+        {
+            collidingObjects.Remove(collision.gameObject);
+        }
+    }
 
     void Start(){
-        handTracking = gameObject.GetComponent<HandTracking>();
-        lineRenderer = line.GetComponent<LineRenderer>();
+        handTracking = hands.GetComponent<HandTracking>();
     }
 
     void Update() {
@@ -31,7 +47,8 @@ public class Slider : MonoBehaviour {
         // slider
         if(handTracking.leftGrab){startPosition = handTracking.leftGrabStart; endPosition = handTracking.leftGrabEnd;}
         if(handTracking.rightGrab){startPosition = handTracking.rightGrabStart; endPosition = handTracking.rightGrabEnd;}
-        if((handTracking.leftGrab || handTracking.rightGrab) && startPosition.y > 4.0f){
+        // if((handTracking.leftGrab || handTracking.rightGrab) && startPosition.y > 4.0f){
+        if((handTracking.leftGrab || handTracking.rightGrab) && collidingObjects.Count > 0){
             slider.transform.localScale = new Vector3(0.8f,0.4f,0.8f);
             if(!grabbing){ 
                 // this runs once when you grab the slider
@@ -53,25 +70,6 @@ public class Slider : MonoBehaviour {
         } else{
             slider.transform.localScale = new Vector3(0.4f,0.2f,0.4f);
             grabbing = false;
-        }
-
-        // line
-        if(handTracking.leftGrab && handTracking.rightGrab){
-            // this runs when you're grabbing with both of your hands
-            lineRenderer.SetPosition(0, handTracking.leftGrabEnd);
-            lineRenderer.SetPosition(1, handTracking.rightGrabEnd);
-            float lineLength = Vector3.Distance(handTracking.leftGrabEnd, handTracking.rightGrabEnd);
-            lineRenderer.startWidth = lineRenderer.endWidth = Mathf.Clamp(0.5f - lineLength / 20.0f, 0.05f, 0.5f);
-            line.SetActive(true);
-        } else { line.SetActive(false); }
-
-        // button
-        if(handTracking.rightIndex.x > 4.7f || handTracking.leftIndex.x > 4.7f){
-            // this runs when your left or right index pushes the button
-            button.transform.localPosition = new Vector3(0, 0.05f, 0);
-            Serial.Write(";a(\"startTrack(\"1\")\")b(\"startTrack(\"1\")\");");
-        } else{
-            button.transform.localPosition = new Vector3(0, 0.2f, 0);
         }
     }
 }

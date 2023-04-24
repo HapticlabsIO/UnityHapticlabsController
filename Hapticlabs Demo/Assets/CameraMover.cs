@@ -5,10 +5,10 @@ using UnityEngine;
 public class CameraMover : MonoBehaviour
 {
 
-    public float pos;
-    public float startPosition;
-    public float targetPosition;
-    private float startTime;
+    private float pos;
+    // private float startPosition;
+    private float targetPosition;
+    // private float startTime;
 
     void Start()
     {
@@ -19,15 +19,16 @@ public class CameraMover : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown (KeyCode.RightArrow) || Input.GetKeyDown (KeyCode.LeftArrow)) {
-            startTime = Time.time;
-            startPosition = pos * 15.0f;
-            pos = Input.GetKeyDown (KeyCode.RightArrow) ? pos + 1 : pos - 1;
-            targetPosition = pos * 15.0f;
+            // startTime = Time.time;
+            // startPosition = pos * 90.0f;
+            pos = Input.GetKeyDown (KeyCode.RightArrow) ? pos - 1 : pos + 1;
+            targetPosition = pos * 90.0f;
         }
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, targetPosition, 0),  Time.deltaTime * 5.0f);
 
-        if(targetPosition != startPosition){
-            transform.position = new Vector3(Mathf.Lerp(startPosition, targetPosition, 50.0f * (Time.time - startTime) / Mathf.Abs(startPosition - targetPosition)), transform.position.y, transform.position.z);
-        }
+        // if(targetPosition != startPosition){
+            // transform.position = new Vector3(Mathf.Lerp(startPosition, targetPosition, 50.0f * (Time.time - startTime) / Mathf.Abs(startPosition - targetPosition)), transform.position.y, transform.position.z);
+        // }
 
     }
 }

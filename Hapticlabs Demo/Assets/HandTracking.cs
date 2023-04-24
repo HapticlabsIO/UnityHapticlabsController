@@ -9,6 +9,8 @@ public class HandTracking: MonoBehaviour {
     public GameObject[] rightHandPoints;
     public GameObject[] leftHandPoints;
 
+    public bool useZ = false;
+
     [Range(0.0f, 2.0f)]
     public float grabThreshold;
 
@@ -35,7 +37,7 @@ public class HandTracking: MonoBehaviour {
                 for (int i = 0; i < 21; i++) {
                     float x = 7 - float.Parse(points[i * 3 + 1 + j]) / 100;
                     float y = float.Parse(points[i * 3 + 2 + j]) / 100;
-                    float z = -float.Parse(points[i * 3 + 3 + j]) / 100 - 1;
+                    float z = useZ ? -float.Parse(points[i * 3 + 3 + j]) / 100 - 1 : 0f;
                     if (points[j] == "'Right'") { rightHandPoints[i].transform.localPosition = new Vector3(x, y, z); whichHand = "Right"; }
                     if (points[j] == "'Left'") { leftHandPoints[i].transform.localPosition = new Vector3(x, y, z); whichHand = "Left"; }
                 }
