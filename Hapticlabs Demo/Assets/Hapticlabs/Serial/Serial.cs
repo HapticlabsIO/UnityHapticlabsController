@@ -371,6 +371,10 @@ public class Serial : MonoBehaviour
 		return line;
 	}
 
+	public static void Close () {
+		s_serial.Close ();
+	}
+
 	/// <summary>
 	/// Send data to the serial port.
 	/// </summary>
