@@ -116,11 +116,10 @@ public class HapticlabsEditor : Editor
             Serial.Write("a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
             Debug.Log("Test message: a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
         }
-        if (GUILayout.Button("Disconnect satellite"))
-        {
-            Serial.Close();
-            Debug.Log("Closing Serial port");
-        }
+        // if (GUILayout.Button("Disconnect satellite"))
+        // {
+        //     Serial.Close();
+        // }
 
         
     }

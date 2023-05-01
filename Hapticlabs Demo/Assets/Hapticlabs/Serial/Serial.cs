@@ -174,7 +174,7 @@ public class Serial : MonoBehaviour
 		s_instances.Add (this);
 
 		if (GetConfig ().logDebugInfos && !s_debug) {
-			Debug.LogWarning ("Serial debug informations enabled by " + GetConfig ());
+			// Debug.LogWarning ("Serial debug informations enabled by " + GetConfig ());
 			s_debug = true;
 		}
 
@@ -191,7 +191,7 @@ public class Serial : MonoBehaviour
 		if (s_serial != null) {
 			if (s_serial.IsOpen) {
 				if (s_debug) {
-					Debug.Log ("closing serial port");
+					Debug.Log ("Closing serial port");
 				}
 				s_serial.Close ();
 			}
@@ -371,9 +371,12 @@ public class Serial : MonoBehaviour
 		return line;
 	}
 
-	public static void Close () {
-		s_serial.Close ();
-	}
+	// public static void Close () {
+	// 	if (s_serial != null && s_serial.IsOpen) {
+	// 		Debug.Log("Closing Serial");
+	// 		s_serial.Close ();
+	// 	}
+	// }
 
 	/// <summary>
 	/// Send data to the serial port.
@@ -613,13 +616,13 @@ public class Serial : MonoBehaviour
 	}
 
 
-	void OnGUI ()
-	{
+	// void OnGUI ()
+	// {
 
-		// Show debug only if enabled and by the first instance to avoid overwrite same data
-		if (s_debug && this == s_instances [0]) {
-			GUILayout.Label ("Serial last data: " + s_lastDataIn + " (last check: " + s_lastDataCheck + ")");
-		}
-	}
+	// 	// Show debug only if enabled and by the first instance to avoid overwrite same data
+	// 	if (s_debug && this == s_instances [0]) {
+	// 		GUILayout.Label ("Serial last data: " + s_lastDataIn + " (last check: " + s_lastDataCheck + ")");
+	// 	}
+	// }
 
 }
