@@ -64,7 +64,7 @@ public class Serial : MonoBehaviour
 	/// Enable notification of data as it arrives
 	/// Sends OnSerialData(string data) message
 	/// </summary>
-	public bool NotifyData = false;
+	private bool NotifyData = false;
 
 	/// <summary>
 	/// Discard all received data until first line.
@@ -72,30 +72,30 @@ public class Serial : MonoBehaviour
 	/// this would prevent the notification of any line or value.
 	/// Data notification is not impacted by this parameter.
 	/// </summary>
-	public bool SkipFirstLine = false;
+	private bool SkipFirstLine = false;
 
 	/// <summary>
 	/// Enable line detection and notification on received data.
 	/// Message OnSerialLine(string line) is sent for every received line
 	/// </summary>
-	public bool NotifyLines = false;
+	private bool NotifyLines = false;
 
 	/// <summary>
 	/// Maximum number of lines to remember. Get them with GetLines() or GetLastLine()
 	/// </summary>
-	public int RememberLines = 0;
+	private int RememberLines = 0;
 
 	/// <summary>
 	/// Enable lines detection, values separation and notification.
 	/// Each line is split with the value separator (TAB by default)
 	/// Sends Message OnSerialValues(string [] values)
 	/// </summary>
-	public bool NotifyValues = false;
+	private bool NotifyValues = false;
 
 	/// <summary>
 	/// The values separator.
 	/// </summary>
-	public char ValuesSeparator = '\t';
+	private char ValuesSeparator = '\t';
 
 	/// <summary>
 	/// The first line has been received.
@@ -193,6 +193,7 @@ public class Serial : MonoBehaviour
 				if (s_debug) {
 					Debug.Log ("Closing serial port");
 				}
+				s_serial.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");");
 				s_serial.Close ();
 			}
 
