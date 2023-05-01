@@ -191,6 +191,7 @@ public class Serial : MonoBehaviour
 		if (s_serial != null) {
 			if (s_serial.IsOpen) {
 				if (s_debug) {
+					Debug.Log("a(\"s()disableLoop()\")b(\"s()disableLoop()\");");
 					Debug.Log ("Closing serial port");
 				}
 				s_serial.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");");
