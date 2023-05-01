@@ -113,8 +113,8 @@ public class HapticlabsEditor : Editor
         // var hapticlabs = target as Hapticlabs;
         if (GUILayout.Button("Test connection with satellite"))
         {
-            Serial.Write("a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
-            Debug.Log("Test message: a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
+            Serial.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
+            Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
         }
         // if (GUILayout.Button("Disconnect satellite"))
         // {
