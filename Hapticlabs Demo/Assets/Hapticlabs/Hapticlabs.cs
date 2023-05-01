@@ -8,7 +8,7 @@
  * 1. Starting a track by name. 
  * -------
  * 
- *   StartTrack("trackName");
+ *   Hapticlabs.StartTrack("trackName");
  * 
  * - upload the tracks to the Satellite in Hapticlabs Studio
  * - First parameter is the name of the track you created in Hapticlabs studio
