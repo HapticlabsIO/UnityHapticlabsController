@@ -14,7 +14,7 @@ Try changing these settings: Menu > Edit > Project Settings > Player > Other Set
 
 From anywhere in your project you can call these function to command the Satellite.
 
-### 1. By Track Name
+### 1. Start a track from Hapticlabs Studio
 Upload the tracks to the Satellite in Hapticlabs Studio
 
 `Hapticlabs.StartTrack("trackName");`
@@ -25,7 +25,7 @@ Upload the tracks to the Satellite in Hapticlabs Studio
   - queue: true/false (default false) --> controls if the track stops whatever is currently playing or adds it to the queue
   - looping: true/false (default false) --> controls if the track should loop or not
 
-### 2. Start a vibration
+### 2. Vibrate
 
 `Hapticlabs.Vibrate("B", 0.5, 120, 200000);`
 
@@ -37,7 +37,7 @@ Upload the tracks to the Satellite in Hapticlabs Studio
   - queue: true/false (default false) --> controls if the vibration stops whatever is currently playing or adds it to the queue
   - looping: true/false (default false) --> controls if the vibration should loop or not
   
-### 3. Start a pulse
+### 3. Pulse
 Only supported for Voice Coils!
 
 `Hapticlabs.Pulse("B", 0.5, 200000);`
