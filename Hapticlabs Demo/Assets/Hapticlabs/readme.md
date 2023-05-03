@@ -20,7 +20,7 @@
 
 ## Usage
 
-From anywhere in your project you can call these function to command the Satellite.
+From anywhere in your project you can call these function to command the Satellite. When using recurring haptics, we recommend not calling a function every loop as it will slow down performance, rather aim for a looped haptic and the send a new message when it changes.
 
 ### 1. Start a track made in Hapticlabs Studio
 
@@ -39,7 +39,8 @@ Hapticlabs.StartTrack("trackName");
 ### 2. Vibrate
 
 ```cs
-Hapticlabs.Vibrate("B", 0.5, 120, 200000);
+Hapticlabs.Vibrate("B", 0.5, 120, 200000); // no queuing, no looping
+Hapticlabs.Vibrate("B", 0.5, 120, 200000, queue: true, looping: true);
 ```
 - First parameter is the channel `"A"`, `"B"` or `"AB"`
 - Second parameter is the intensity between `0.0` and `1.0`
@@ -54,7 +55,8 @@ Hapticlabs.Vibrate("B", 0.5, 120, 200000);
 Only supported for Voice Coils!
 
 ```cs
-Hapticlabs.Pulse("B", 0.5, 200000);
+Hapticlabs.Pulse("B", 0.5, 200000); // no queuing, no looping
+Hapticlabs.Pulse("B", 0.5, 200000, queue: true, looping: true);
 ```
 
 - First parameter is the channel `"A"`, `"B"` or `"AB"`
@@ -63,3 +65,39 @@ Hapticlabs.Pulse("B", 0.5, 200000);
 - Optional parameters are:
   - `queue: true/false` (default false) --> controls if the vibration stops whatever is currently playing or adds it to the queue
   - `looping: true/false` (default false) --> controls if the vibration should loop or not
+
+
+## Example usage
+
+Make sure your character or other object triggering the collisions have a Rigidbody and a Collider attached
+
+### Collision with Object
+
+When using a Sphere/Box/Capsule/etc. collider on an object, then you can trigger a Hapticlabs track by attaching a script to the same game object with the following code inside the class:
+
+```cs
+private void OnCollisionEnter(Collision collision) {
+    Hapticlabs.StartTrack("bubblePop");
+}
+```
+
+### Collision with Particles from Particle Emitter
+
+When using a particle emitter, check Colission > Send Collision Messages, then you can trigger a Hapticlabs track by attaching a script to the same game object with the following code inside the class:
+
+```cs
+private void OnParticleCollision(GameObject other) {    
+    Hapticlabs.StartTrack("bubblePop");
+}
+```
+
+### Dynamic vibrations
+
+When you want to vary the parameters of vibrations or pulses, you can of course fill in the function parameters with variables.
+
+```cs
+intensity = 1;
+frequency = 120;
+Hapticlabs.Vibrate("B", intensity, frequency, 200000, looping: true);
+```
+> Try to not call this function every Update(), but rather when it changes or with set intervals.
