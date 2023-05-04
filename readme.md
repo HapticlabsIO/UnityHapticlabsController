@@ -4,28 +4,30 @@
 
 ### In Hapticlabs Studio
 
-1. Configure the actuator types connected to the Satellite; ERM, LRA or Voice Coil on channel A and/or B.
+1. Configure the actuator types connected to the Satellite (ERM, LRA or Voice Coil]) on channel A and/or B.
 2. Once done creating tracks and naming them accordingly, upload them to the Satellite: Menu > Development > Send Tracks to Satellite
-3. Disconnect your Satellite in Satellite Setup. 
+3. Disconnect your Satellite in Satellite menu. 
+
+[More info about the Satellite menu](https://www.hapticlabs.io/article/settings-panel)
 
 ### In Unity
 
-1. Download this folder and import it into your Unity project folder. Assets for example.
+1. Download this folder and import it into your Unity project folder egg. Assets.
 2. Drag the `Hapticlabs Manager.prefab` into your scene (make sure the Serial Speed is set to 115200).
-3. Done! Now running the game will connect to the Satellite through Serial. So make sure no other application is connected or trying to connect to the Serial port, for example Hapticlabs Studio or an (Arduino) Serial Monitor.
+3. Done! Playing the scene will establish a connection to the Satellite through Serial. So make sure no other application is connected or trying to connect to the Serial port, for example Hapticlabs Studio or an (Arduino) Serial Monitor.
  <img width="348" alt="Hapticlabs prefab" src="https://user-images.githubusercontent.com/34678030/235880227-780c0c75-347b-4f96-9067-2d92990c8fe9.png">
 
 > If you have any problems with Serial connection such as error CS0234: The type or namespace name 'Ports' does not exist in the namespace 'System.IO'. 
 > Try changing these settings: Menu > Edit > Project Settings > Player > Other Settings > API Compatibility Level: .Net 2.0 
 
 
-## Usage
+## Usage (simple)
 
-From anywhere in your project you can call these function to command the Satellite. When using recurring haptics, we recommend not calling a function every loop as it will slow down performance, rather aim for a looped haptic and the send a new message when it changes.
+From anywhere in your project you can call these function to trigger feedback on the Satellite. When using recurring haptics, we recommend not calling a function every loop as it will slow down performance, rather aim for a looped haptic and the send a new message when it changes.
 
 ### 1. Start a track made in Hapticlabs Studio
 
-Make sure to upload the tracks to the Satellite in Hapticlabs Studio before calling this function.
+Make sure to upload the tracks to the Satellite in Hapticlabs Studio before calling this function. (See Setup)
 
 ```cs
 Hapticlabs.StartTrack("trackName");
@@ -36,8 +38,11 @@ Hapticlabs.StartTrack("trackName");
   - `queue: true/false` (default false) --> controls if the track stops whatever is currently playing or adds it to the queue
   - `looping: true/false` (default false) --> controls if the track should loop or not
  
+## Usage (advanced)
 
-### 2. Vibrate
+To create dynamic feedback linked to content within your scene, you can send custom commands:
+
+### 1. Vibrate
 
 ```cs
 Hapticlabs.Vibrate("B", 0.5, 120, 200000); // no queuing, no looping
@@ -52,8 +57,8 @@ Hapticlabs.Vibrate("B", 0.5, 120, 200000, queue: true, looping: true);
   - `looping: true/false` (default false) --> controls if the vibration should loop or not
   
   
-### 3. Pulse
-Only supported for Voice Coils!
+### 2. Pulse
+Only recommended for Voice Coils!
 
 ```cs
 Hapticlabs.Pulse("B", 0.5, 200000); // no queuing, no looping
