@@ -100,6 +100,12 @@ public class Hapticlabs : MonoBehaviour
         Serial.Write(message);
     }
 
+    public static void Stop(){
+        const string message = "a(\"s()\")a(\"disableLoop()\")b(\"s()\")b(\"disableLoop()\");";
+        if(h_debug){Debug.Log(message);}
+        Serial.Write(message);
+    }
+
 }
 
 // Adding the test button to the inspector GUI
