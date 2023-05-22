@@ -26,7 +26,7 @@
  * - First parameter is the channel "A", "B" or "AB"
  * - Second parameter is the intensity between 0 and 1
  * - Third parameter is the frequency between 1 and 400
- * - Fourth parameter is the duration in ms
+ * - Fourth parameter is the duration in micro seconds
  * - Optional parameters are:
  *   - queue: true/false (default false)
  *     controls if the vibration stops whatever is currently playing or adds it to the queue
@@ -41,7 +41,7 @@
  *   Only supported for Voice Coils!
  * - First parameter is the channel "A", "B" or "AB"
  * - Second parameter is the intensity between 0 and 1
- * - Third parameter is the duration in ms
+ * - Third parameter is the duration in micro seconds
  * - Optional parameters are:
  *   - queue: true/false (default false)
  *     controls if the vibration stops whatever is currently playing or adds it to the queue
