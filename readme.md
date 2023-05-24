@@ -107,3 +107,9 @@ frequency = 120;
 Hapticlabs.Vibrate("B", intensity, frequency, 200000, looping: true);
 ```
 > Try to not call this function every Update(), but rather when it changes or with set intervals.
+
+## References
+
+Serial bridge based on the script from Pierre Rossel. [link](https://github.com/prossel/UnitySerialPort.git)
+
+Bubble particle system from Moonflower Carnivore. [link](https://assetstore.unity.com/packages/vfx/particles/environment/jiggly-bubble-free-61236#content)
