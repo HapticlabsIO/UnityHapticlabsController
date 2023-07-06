@@ -11,8 +11,10 @@ public class TCPClient : MonoBehaviour
 {
 	#region Public Variables
 	[Header("Network")]
-	public static string ipAdress = "127.0.0.1";
-	public static int port = 64209;
+	public string ipAdress = "127.0.0.1";
+	public static string currentIPAddress = "127.0.0.1";
+	public int port = 64209;
+	public static int currentPort = 64209;
 	public static float waitingMessagesFrequency = 1;
 	#endregion
 
@@ -22,6 +24,8 @@ public class TCPClient : MonoBehaviour
 	private static byte[] m_Buffer = new byte[49152];
 	private static int m_BytesReceived = 0;
 	private static string m_ReceivedMessage = "";
+
+	private static bool enable = false;
 
 	// flag to detect whether coroutine is still running to workaround coroutine being stopped after saving scripts while running in Unity
 	private int nCoroutineRunning = 0;
@@ -46,8 +50,29 @@ public class TCPClient : MonoBehaviour
 		CloseClient();
 	}
 
+	public static void EnableOperation() {
+		enable = true;
+	}
+
+	public static void DisableOperation() {
+		enable = false;
+	}
+
 	void Update ()
 	{
+		if (!enable){
+			return;
+		}
+		if (currentIPAddress != ipAdress || currentPort != port){
+			currentIPAddress = ipAdress;
+			currentPort = port;
+
+			// Gotta reconnect if those change
+			if (IsConnected()){
+				CloseClient();
+				StartClient();
+			}
+		}
 		if (EnsureConnection()) {
 
 			if (nCoroutineRunning == 0) {
@@ -82,27 +107,40 @@ public class TCPClient : MonoBehaviour
 	}
 
 	public static bool IsConnected(){
-		return m_Client != null;
+		if (!enable){
+			return false;
+		}
+		return m_Client != null && m_Client.Connected;
 	}
 
 	public static bool EnsureConnection(){
+		if (!enable){
+			return false;
+		}
         StartClient();
 		return IsConnected();
 	}
 
-    public static void Write(string message){
+    public static void WriteLn(string message){
+		if (!enable){
+			Debug.Log("rejected");
+			return;
+		}
         if (EnsureConnection()){
-            SendMessageToServer(message);
+            SendMessageToServer(message + "\n");
         }
     }
 
 	//Start client and stablish connection with server
 	public static void StartClient()
 	{
+		if (!enable){
+			return;
+		}
 		//Early out
 		if (m_Client != null)
 		{
-			// ClientLog($"There is already a runing client on {ipAdress}::{port}", Color.red);
+			// ClientLog($"There is already a runing client on {currentIPAddress}::{currentPort}", Color.red);
 			return;
 		}
 
@@ -111,12 +149,12 @@ public class TCPClient : MonoBehaviour
 			//Create new client
 			m_Client = new TcpClient();
 			//Set and enable client
-			m_Client.Connect(ipAdress, port);
-			ClientLog($"Client Started on {ipAdress}::{port}", Color.green);
+			m_Client.Connect(currentIPAddress, currentPort);
+			ClientLog($"Client Started on {currentIPAddress}::{currentPort}", Color.green);
 		}
 		catch (SocketException)
 		{
-			ClientLog($"The Hapticlabs TCP connection was not found on {ipAdress}::{port}", Color.red);
+			ClientLog($"The Hapticlabs TCP connection was not found on {currentIPAddress}::{currentPort}", Color.red);
 			CloseClient();
 		}
 	}
@@ -167,7 +205,7 @@ public class TCPClient : MonoBehaviour
 	}
 
 	//Send custom string msg to server
-	public static void SendMessageToServer(string messageToSend)
+	protected static void SendMessageToServer(string messageToSend)
 	{
 		try
 		{

@@ -161,6 +161,8 @@ public class Serial : MonoBehaviour
 	private static float s_lastDataIn = 0;
 	private static float s_lastDataCheck = 0;
 
+	private static bool enable = false;
+
 	#endregion
 
 	void OnValidate ()
@@ -202,8 +204,19 @@ public class Serial : MonoBehaviour
 		}
 	}
 
+	public static void EnableOperation() {
+		enable = true;
+	}
+
+	public static void DisableOperation() {
+		enable = false;
+	}
+
 	void Update ()
-	{
+	{	
+		if (!enable){
+			return;
+		}
 		if (s_serial != null) {
 
 			// Will (re)open if device disconnected and reconnected (or Leonardo reset)
@@ -244,7 +257,6 @@ public class Serial : MonoBehaviour
 
 	public IEnumerator ReadSerialLoop ()
 	{
-
 		while (true) {
 
 			if (!enabled) {
@@ -349,7 +361,6 @@ public class Serial : MonoBehaviour
 	/// Useful if you need to process all the received lines, even if there are several since last call
 	public List<string> GetLines (bool keepLines = false)
 	{
-
 		List<string> lines = new List<string> (linesIn);
 
 		if (!keepLines)
@@ -362,7 +373,6 @@ public class Serial : MonoBehaviour
 	/// Useful when you need only the last received values and can ignore older ones
 	public string GetLastLine (bool keepLines = false)
 	{
-
 		string line = "";
 		if (linesIn.Count > 0)
 			line = linesIn [linesIn.Count - 1];
@@ -385,6 +395,9 @@ public class Serial : MonoBehaviour
 	/// </summary>
 	public static void Write (string message)
 	{
+		if (!enable){
+			return;
+		}
 		if (checkOpen ())
 			s_serial.Write (message);
 	}
@@ -394,6 +407,12 @@ public class Serial : MonoBehaviour
 	/// </summary>
 	public static void WriteLn (string message = "")
 	{
+		if (!enable){
+			return;
+		}
+		if (!enable){
+			return;
+		}
 		s_serial.Write (message + "\n");
 	}
 
@@ -424,6 +443,9 @@ public class Serial : MonoBehaviour
 	/// <param name="portSpeed">Port speed.</param>
 	public static bool checkOpen ()
 	{
+		if (!enable){
+			return false;
+		}
 
 		if (s_serial == null) {
 

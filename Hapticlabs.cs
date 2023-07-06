@@ -67,11 +67,32 @@ using UnityEditor;
 public class Hapticlabs : MonoBehaviour
 {
     public bool logDebugInfos = true;
+    public bool enableTCP = true;
+    public bool enableSerial = false;
+    public static bool useTCP = false;
+    public static bool useSerial = false;
     private static bool h_debug;
 
     void Update(){
         if(h_debug != logDebugInfos){
             h_debug = logDebugInfos;
+        }
+        if (useSerial != enableSerial){
+            useSerial = enableSerial;
+            if (useSerial){
+                Serial.EnableOperation();
+            } else {
+                Serial.DisableOperation();
+            }
+        }
+        if (useTCP != enableTCP){
+            useTCP = enableTCP;
+            if (useTCP){
+                Debug.Log("enabled");
+                TCPClient.EnableOperation();
+            } else {
+                TCPClient.DisableOperation();
+            }
         }
     }
 
@@ -107,10 +128,10 @@ public class Hapticlabs : MonoBehaviour
     }
 
     private static void WriteToSatellite(string message){
-        if(TCPClient.IsConnected()){
-            TCPClient.Write(message);
+        if(useTCP && TCPClient.IsConnected()){
+            TCPClient.WriteLn(message);
         }
-        if (Serial.checkOpen()){
+        if (useSerial && Serial.checkOpen()){
             Serial.Write(message);
         }
     }
@@ -134,7 +155,7 @@ public class HapticlabsEditor : Editor
         if (GUILayout.Button("Test TCP connection with satellite"))
         {
             Debug.Log(TCPClient.IsConnected());
-            TCPClient.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");\n");
+            TCPClient.WriteLn("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
             Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
         }
         // if (GUILayout.Button("Disconnect satellite"))
