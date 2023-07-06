@@ -79,7 +79,7 @@ public class Hapticlabs : MonoBehaviour
     public static void StartTrack(string trackName, bool queue = false, bool looping = false){
         string message = (!queue ? "a(\"s()disableLoop()\")b(\"s()disableLoop()\");" : "") + "startTrack(\"" + trackName + "\")" + (looping ? "a(\"enableLoop()\")b(\"enableLoop()\")" : "") + ";";
         if(h_debug){Debug.Log(message);}
-        Serial.Write(message);
+        WriteToSatellite(message);
     }
 
     // Example: Hapticlabs.Vibrate("B", 0.5, 120, 200000);
@@ -88,7 +88,7 @@ public class Hapticlabs : MonoBehaviour
         string command = "(\"v(" + intensity + " " + frequency + " " + duration + ")" + (looping ? "enableLoop()" : "disableLoop()") + "\")";
         message += (track.Contains("A") ? "a" + command : "") + (track.Contains("B") ? "b" + command : "") + ";";
         if(h_debug){Debug.Log(message);}
-        Serial.Write(message);
+        WriteToSatellite(message);
     }
 
     // Example: Hapticlabs.Pulse("B", 0.5, 200000);
@@ -97,13 +97,22 @@ public class Hapticlabs : MonoBehaviour
         string command = "(\"lp(" + intensity + " 50000 " + duration + ")" + (looping ? "enableLoop()" : "disableLoop()") + "\")";
         message += (track.Contains("A") ? "a" + command : "") + (track.Contains("B") ? "b" + command : "") + ";";
         if(h_debug){Debug.Log(message);}
-        Serial.Write(message);
+        WriteToSatellite(message);
     }
 
     public static void Stop(){
         const string message = "a(\"s()\")a(\"disableLoop()\")b(\"s()\")b(\"disableLoop()\");";
         if(h_debug){Debug.Log(message);}
-        Serial.Write(message);
+        WriteToSatellite(message);
+    }
+
+    private static void WriteToSatellite(string message){
+        if(TCPClient.IsConnected()){
+            TCPClient.Write(message);
+        }
+        if (Serial.checkOpen()){
+            Serial.Write(message);
+        }
     }
 
 }
@@ -117,9 +126,15 @@ public class HapticlabsEditor : Editor
         base.OnInspectorGUI();
 
         // var hapticlabs = target as Hapticlabs;
-        if (GUILayout.Button("Test connection with satellite"))
+        if (GUILayout.Button("Test Serial connection with satellite"))
         {
             Serial.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
+            Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
+        }
+        if (GUILayout.Button("Test TCP connection with satellite"))
+        {
+            Debug.Log(TCPClient.IsConnected());
+            TCPClient.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");\n");
             Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
         }
         // if (GUILayout.Button("Disconnect satellite"))

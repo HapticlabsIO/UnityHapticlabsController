@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6979648867130085635}
   - component: {fileID: 994968109841887513}
   - component: {fileID: 994968109841887512}
+  - component: {fileID: 4904336827256296084}
   m_Layer: 0
   m_Name: Hapticlabs Manager
   m_TagString: Untagged
@@ -51,12 +52,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a112bf3d7eee4336960fd9dd2dc77f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NotifyData: 0
-  SkipFirstLine: 0
-  NotifyLines: 0
-  RememberLines: 0
-  NotifyValues: 0
-  ValuesSeparator: 9
 --- !u!114 &994968109841887513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,3 +84,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logDebugInfos: 1
+--- !u!114 &4904336827256296084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994968109841887505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdef9de81eb45e429d2c289cd6539ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
