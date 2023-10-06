@@ -25,7 +25,7 @@
 
 ### Start a track made in Hapticlabs Studio
 
-From anywhere in your project you can call the following function to trigger feedback on the Satellite. When using recurring haptics, we recommend not calling a function every loop as it will slow down performance, rather aim for a looped haptic and the send a new message when it changes.
+From anywhere in your project you can call the following function to trigger feedback on the Satellite.
 
 Make sure to upload the tracks to the Satellite in Hapticlabs Studio before calling this function. (See Setup)
 
@@ -36,41 +36,25 @@ Hapticlabs.StartTrack("trackName");
 - First parameter is the name of the track you created in Hapticlabs studio
 - Optional parameters are:
   - `queue: true/false` (default false) --> controls if the track stops whatever is currently playing or adds it to the queue
-  - `looping: true/false` (default false) --> controls if the track should loop or not
- 
-## Usage (advanced)
+  - `amplitude: float` (default 1.0) --> controls the track's overall amplitude scale
 
-To create dynamic feedback linked to content within your scene, you can send custom commands:
+### Adjust the playback intensity
 
-### 1. Vibrate
+At any time, you can scale the amplitude of the haptic output. Values greater than 1 represent an increase in intensity over the original signal, whereas values less than 1 reperesent a decrease.
 
 ```cs
-Hapticlabs.Vibrate("B", 0.5, 120, 200000); // no queuing, no looping
-Hapticlabs.Vibrate("B", 0.5, 120, 200000, queue: true, looping: true);
+Hapticlabs.SetAmplitudeScale(amplitude);
 ```
-- First parameter is the channel `"A"`, `"B"` or `"AB"`
-- Second parameter is the intensity between `0.0` and `1.0`
-- Third parameter is the frequency between `1` and `400`
-- Fourth parameter is the duration in ms
-- Optional parameters are:
-  - `queue: true/false` (default false) --> controls if the vibration stops whatever is currently playing or adds it to the queue
-  - `looping: true/false` (default false) --> controls if the vibration should loop or not
-  
-  
-### 2. Pulse
-Only recommended for Voice Coils!
+- First parameter is a float representing the amplitude scale
+
+### Abort haptic playback
+
+At any time, you can abort haptic playback by simply calling
 
 ```cs
-Hapticlabs.Pulse("B", 0.5, 200000); // no queuing, no looping
-Hapticlabs.Pulse("B", 0.5, 200000, queue: true, looping: true);
+Hapticlabs.Stop();
 ```
 
-- First parameter is the channel `"A"`, `"B"` or `"AB"`
-- Second parameter is the intensity between `0.0` and `1.0`
-- Third parameter is the duration in ms
-- Optional parameters are:
-  - `queue: true/false` (default false) --> controls if the vibration stops whatever is currently playing or adds it to the queue
-  - `looping: true/false` (default false) --> controls if the vibration should loop or not
 
 
 # Examples
@@ -96,17 +80,6 @@ private void OnParticleCollision(GameObject other) {
     Hapticlabs.StartTrack("particlePop");
 }
 ```
-
-### Dynamic vibrations
-
-When you want to vary the parameters of vibrations or pulses, you can of course fill in the function parameters with variables.
-
-```cs
-intensity = 1;
-frequency = 120;
-Hapticlabs.Vibrate("B", intensity, frequency, 200000, looping: true);
-```
-> Try to not call this function every Update(), but rather when it changes or with set intervals.
 
 ## References
 

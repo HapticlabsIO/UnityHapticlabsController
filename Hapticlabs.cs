@@ -17,37 +17,7 @@
  *     controls if the track stops whatever is currently playing or adds it to the queue
  *   - looping: true/false (default false)
  *     controls if the track should loop or not
- *   
- * 2. Start a vibration
- * -------
- * 
- *   Hapticlabs.Vibrate("B", 0.5, 120, 200000);
  *
- * - First parameter is the channel "A", "B" or "AB"
- * - Second parameter is the intensity between 0 and 1
- * - Third parameter is the frequency between 1 and 400
- * - Fourth parameter is the duration in micro seconds
- * - Optional parameters are:
- *   - queue: true/false (default false)
- *     controls if the vibration stops whatever is currently playing or adds it to the queue
- *   - looping: true/false (default false)
- *     controls if the vibration should loop or not
- * 
- * 3. Start a pulse
- * -------
- * 
- *   Hapticlabs.Pulse("B", 0.5, 200000);
- *
- *   Only supported for Voice Coils!
- * - First parameter is the channel "A", "B" or "AB"
- * - Second parameter is the intensity between 0 and 1
- * - Third parameter is the duration in micro seconds
- * - Optional parameters are:
- *   - queue: true/false (default false)
- *     controls if the vibration stops whatever is currently playing or adds it to the queue
- *   - looping: true/false (default false)
- *     controls if the vibration should loop or not
- * 
  * Troubleshooting the Serial
  * ---------------
  * 
@@ -97,32 +67,20 @@ public class Hapticlabs : MonoBehaviour
     }
 
     // Example: StartTrack("trackName");    --> trackName needs to be loaded on the Satellite from Hapticlabs Studio!
-    public static void StartTrack(string trackName, bool queue = false, bool looping = false){
-        string message = (!queue ? "a(\"s()disableLoop()\")b(\"s()disableLoop()\");" : "") + "startTrack(\"" + trackName + "\")" + (looping ? "a(\"enableLoop()\")b(\"enableLoop()\")" : "") + ";";
-        if(h_debug){Debug.Log(message);}
-        WriteToSatellite(message);
-    }
-
-    // Example: Hapticlabs.Vibrate("B", 0.5, 120, 200000);
-    public static void Vibrate(string track, float intensity, int frequency, int duration, bool queue = false, bool looping = false){
-        string message = (!queue ? (track.Contains("A") ? "a(\"s()\")" : "") + (track.Contains("B") ? "b(\"s()\")" : "") + ";" : "");
-        string command = "(\"v(" + intensity + " " + frequency + " " + duration + ")" + (looping ? "enableLoop()" : "disableLoop()") + "\")";
-        message += (track.Contains("A") ? "a" + command : "") + (track.Contains("B") ? "b" + command : "") + ";";
-        if(h_debug){Debug.Log(message);}
-        WriteToSatellite(message);
-    }
-
-    // Example: Hapticlabs.Pulse("B", 0.5, 200000);
-    public static void Pulse(string track, float intensity, int duration, bool queue = false, bool looping = false){
-        string message = (!queue ? (track.Contains("A") ? "a(\"s()\")" : "") + (track.Contains("B") ? "b(\"s()\")" : "") + ";" : "");
-        string command = "(\"lp(" + intensity + " 50000 " + duration + ")" + (looping ? "enableLoop()" : "disableLoop()") + "\")";
-        message += (track.Contains("A") ? "a" + command : "") + (track.Contains("B") ? "b" + command : "") + ";";
+    public static void StartTrack(string trackName, bool queue = false, float amplitudeScale = 1.0f){
+        string message = (!queue ? "stop();\n" : "") + "startTrack(\"" + trackName + "\")\n" + "setAmplitudeScale(" + amplitudeScale + ");";
         if(h_debug){Debug.Log(message);}
         WriteToSatellite(message);
     }
 
     public static void Stop(){
-        const string message = "a(\"s()\")a(\"disableLoop()\")b(\"s()\")b(\"disableLoop()\");";
+        const string message = "stop();";
+        if(h_debug){Debug.Log(message);}
+        WriteToSatellite(message);
+    }
+
+    public static void SetAmplitudeScale(float amplitudeScale){
+        string message = "setAmplitudeScale(" + amplitudeScale + ");";
         if(h_debug){Debug.Log(message);}
         WriteToSatellite(message);
     }
@@ -152,17 +110,15 @@ public class HapticlabsEditor : Editor
             Serial.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
             Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
         }
-        if (GUILayout.Button("Test TCP connection with satellite"))
+        if (GUILayout.Button("Test TCP connection with Hapticlabs Studio"))
         {
             Debug.Log(TCPClient.IsConnected());
-            TCPClient.WriteLn("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
-            Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
+            TCPClient.WriteLn("stop();startTrack(\"\");");
+            Debug.Log("Test message: stop();startTrack(\"\");");
         }
         // if (GUILayout.Button("Disconnect satellite"))
         // {
         //     Serial.Close();
-        // }
-
-        
+        // }      
     }
 }
