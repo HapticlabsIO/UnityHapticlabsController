@@ -68,7 +68,7 @@ public class Hapticlabs : MonoBehaviour
 
     // Example: StartTrack("trackName");    --> trackName needs to be loaded on the Satellite from Hapticlabs Studio!
     public static void StartTrack(string trackName, bool queue = false, float amplitudeScale = 1.0f){
-        string message = (!queue ? "stop();\n" : "") + "startTrack(\"" + trackName + "\")\n" + "setAmplitudeScale(" + amplitudeScale + ");";
+        string message = (!queue ? "stop();\n" : "") + "startTrack(\"" + trackName + "\" " + amplitudeScale + ");";
         if(h_debug){Debug.Log(message);}
         WriteToSatellite(message);
     }
