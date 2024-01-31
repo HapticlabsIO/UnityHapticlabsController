@@ -82,7 +82,7 @@ private void OnParticleCollision(GameObject other) {
 }
 ```
 
-### Changing vibration amplitude dynamically
+### Looping tracks and changing vibration amplitude dynamically
 The feature of queueing signals allows us to create seemingly endless loops of a track. To achieve this, we reschedule playback of the track just before the the running playback terminates. Using the queue parameter, we ensure that the newly scheduled playback will not interrupt the currently playing signal:
 
 ```cs
