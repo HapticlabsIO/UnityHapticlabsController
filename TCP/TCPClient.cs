@@ -71,38 +71,40 @@ public class TCPClient : MonoBehaviour
 			if (IsConnected()){
 				CloseClient();
 				StartClient();
+				Debug.Log("bruh");
 			}
 		}
 		if (EnsureConnection()) {
 
-			if (nCoroutineRunning == 0) {
+			// No need to listen
+			// if (nCoroutineRunning == 0) {
 
-				//Debug.Log ("starting ReadSerialLoop* coroutine from " + this.name);
+			// 	Debug.Log ("starting ListenServerMessages* coroutine from " + this.name);
 
-				switch (Application.platform) {
+			// 	switch (Application.platform) {
 
-				case RuntimePlatform.WindowsEditor:
-				case RuntimePlatform.WindowsPlayer:
-                        //				case RuntimePlatform.OSXEditor:
-                        //				case RuntimePlatform.OSXPlayer:
+			// 	case RuntimePlatform.WindowsEditor:
+			// 	case RuntimePlatform.WindowsPlayer:
+            //             //				case RuntimePlatform.OSXEditor:
+            //             //				case RuntimePlatform.OSXPlayer:
 
-                        // Each instance has its own coroutine but only one will be active
-					StartCoroutine (ListenServerMessages ());
-					break;
+            //             // Each instance has its own coroutine but only one will be active
+			// 		StartCoroutine (ListenServerMessages ());
+			// 		break;
 
-				default:
-                        // Each instance has its own coroutine but only one will be active
-					StartCoroutine (ListenServerMessages ());
-					break;
+			// 	default:
+            //             // Each instance has its own coroutine but only one will be active
+			// 		StartCoroutine (ListenServerMessages ());
+			// 		break;
 
-				}
-			} else {
-				if (nCoroutineRunning > 1) {
-					Debug.Log (nCoroutineRunning + " coroutines in " + name);
-				}
+			// 	}
+			// } else {
+			// 	if (nCoroutineRunning > 1) {
+			// 		Debug.Log (nCoroutineRunning + " coroutines in " + name);
+			// 	}
 
-				nCoroutineRunning = 0;
-			}
+			// 	nCoroutineRunning = 0;
+			// }
 		}
 	}
 
@@ -173,6 +175,7 @@ public class TCPClient : MonoBehaviour
 		//Start Async Reading from Server and manage the response on MessageReceived function
 		do
 		{
+			nCoroutineRunning++;
 			// ClientLog("Client is listening server msg...", Color.yellow);
 			//Start Async Reading from Server and manage the response on MessageReceived function
 			m_NetStream.BeginRead(m_Buffer, 0, m_Buffer.Length, MessageReceived, null);
