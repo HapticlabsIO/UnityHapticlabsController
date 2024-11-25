@@ -144,5 +144,3 @@ Now, we can simply set `continueVibrating` and `intensity` within our code and t
 ## References
 
 Serial bridge based on the script from Pierre Rossel. [link](https://github.com/prossel/UnitySerialPort.git)
-
-Bubble particle system from Moonflower Carnivore. [link](https://assetstore.unity.com/packages/vfx/particles/environment/jiggly-bubble-free-61236#content)
