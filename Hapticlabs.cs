@@ -28,8 +28,8 @@
  *     Menu Edit | Project Settings | Player | Other Settings | API Compatibility Level: .Net 2.0
  * 
  */
- 
- using System.Collections;
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -43,59 +43,76 @@ public class Hapticlabs : MonoBehaviour
     public static bool useSerial = false;
     private static bool h_debug;
 
-    void Update(){
-        if(h_debug != logDebugInfos){
+    void Update()
+    {
+        if (h_debug != logDebugInfos)
+        {
             h_debug = logDebugInfos;
         }
-        if (useSerial != enableSerial){
+        if (useSerial != enableSerial)
+        {
             useSerial = enableSerial;
-            if (useSerial){
+            if (useSerial)
+            {
                 Serial.EnableOperation();
-            } else {
+            }
+            else
+            {
                 Serial.DisableOperation();
             }
         }
-        if (useTCP != enableTCP){
+        if (useTCP != enableTCP)
+        {
             useTCP = enableTCP;
-            if (useTCP){
+            if (useTCP)
+            {
                 Debug.Log("enabled");
                 TCPClient.EnableOperation();
-            } else {
+            }
+            else
+            {
                 TCPClient.DisableOperation();
             }
         }
     }
 
     // Example: StartTrack("trackName");    --> trackName needs to be loaded on the Satellite from Hapticlabs Studio!
-    public static void StartTrack(string trackName, bool queue = false, float amplitudeScale = 1.0f){
+    public static void StartTrack(string trackName, bool queue = false, float amplitudeScale = 1.0f)
+    {
         string message = (!queue ? "stop();\n" : "") + "startTrack(\"" + trackName + "\" " + amplitudeScale + ");";
-        if(h_debug){Debug.Log(message);}
+        if (h_debug) { Debug.Log(message); }
         WriteToSatellite(message);
     }
 
-    public static void Stop(){
+    public static void Stop()
+    {
         const string message = "stop();";
-        if(h_debug){Debug.Log(message);}
+        if (h_debug) { Debug.Log(message); }
         WriteToSatellite(message);
     }
 
-    public static void SetAmplitudeScale(float amplitudeScale){
+    public static void SetAmplitudeScale(float amplitudeScale)
+    {
         string message = "setAmplitudeScale(" + amplitudeScale + ");";
-        if(h_debug){Debug.Log(message);}
+        if (h_debug) { Debug.Log(message); }
         WriteToSatellite(message);
     }
 
-    private static void WriteToSatellite(string message){
-        if(useTCP && TCPClient.IsConnected()){
+    private static void WriteToSatellite(string message)
+    {
+        if (useTCP && TCPClient.IsConnected())
+        {
             TCPClient.WriteLn(message);
         }
-        if (useSerial && Serial.checkOpen()){
+        if (useSerial && Serial.checkOpen())
+        {
             Serial.Write(message);
         }
     }
 
 }
 
+#if UNITY_EDITOR
 // Adding the test button to the inspector GUI
 [CustomEditor(typeof(Hapticlabs))]
 public class HapticlabsEditor : Editor
@@ -109,16 +126,7 @@ public class HapticlabsEditor : Editor
         {
             Serial.Write("a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
             Debug.Log("Test message: a(\"s()disableLoop()\")b(\"s()disableLoop()\");a(\"v(1 120 100000)\")b(\"v(1 120 100000)\");");
-        }
-        if (GUILayout.Button("Test TCP connection with Hapticlabs Studio"))
-        {
-            Debug.Log(TCPClient.IsConnected());
-            TCPClient.WriteLn("stop();startTrack(\"\");");
-            Debug.Log("Test message: stop();startTrack(\"\");");
-        }
-        // if (GUILayout.Button("Disconnect satellite"))
-        // {
-        //     Serial.Close();
-        // }      
+        }      
     }
 }
+#endif
